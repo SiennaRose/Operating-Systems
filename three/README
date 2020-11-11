@@ -1,0 +1,39 @@
+
+Please answer the following questions to explain your implementation (Directly write your answer below the questions).
+
+
+
+1. Which are the critical regions need to be protected for mutula exclusion? Why are they? 
+Mutual exclusion is the concept of preventing multiple threads from accessing a shared resource at the same time. This prevents unexpected errors like, a race condition, from happening. 
+In this program the shared resource that needs to be protected would be the buffer array, which holds shared data accessed by multiple consumer and producer threads. 
+The critical region that must be protected for mutual exclusion is therefore the part in code that inserts and removes data from the buffer, i.e. insert_item() and remove_item().
+
+
+
+
+2. There are 7 requirements your program should achieve: 
+
+1)	When a producer thread inserts a new item into the buffer, a message should be print to screen showing which thread (with ID) insert which item (with value) to which buffer slot (with next_in)
+2)	When a consumer thread removes a new item from the buffer, a message should be print to screen showing which thread (with ID) remove which item (with value) from which buffer slot (with next_out)
+3)	Producers must block if the buffer is full,
+4)	Consumers must block if the buffer is empty,
+5)	No two/more producers insert items to the same buffer slot,
+6)	No two/more consumers remove the items from the same buffer slot,
+7)	The messages must be printed in the order showing the real execution scenarios.
+
+Please explain how they are satisfied in your design (you need to explain one by one!)
+	1) The insert_item() method already takes care of this part of the code's design,
+	2) The remove_item() method already takes care of this part of the code's design.
+	3) The semaphore full keeps track of how many slots in the buffer are taken up and will block any producers from inserting more items if it reaches max capacity. 
+	4) The semaphore empty keeps track of how many slots in the buffer are not used and will block a consumer from removing data if there is none.
+	5) By using the semaphore named mutex, the program prevents mutliple threads, or producers, from accessing buffer and accidentally inserting data into the same slot. This is a result of mutual exclusion.  
+	6) By using the semaphore named mutex, the program prevents mutliple threads, or consumers, from accessing buffer and accidentally removing data into the same slot. This is a result of mutual exclusion.  
+	7) The semaphore named mutex prevents multiple threads from accessing buffer at the same time, therefore, until a thread has completed its insert_item() or remove_item() the message for successful execution won't print until that scenario or thread really finished.
+
+3) Why you think your design is the most effective one? Is there any other design also works but less effective? 
+My design uses semaphores, which keeps track of where in an array items can be inserted and removed, as well as whether or not the buffer is full or empty. I think my method
+is mostly effective, however there are definetly other ways to achieve the same results using mutexes or spinlocks. However, doing these methods is mostly less efficient as
+they don't deal with the buffer being empty or full and excess code will be needed to cover these cases. 
+
+
+

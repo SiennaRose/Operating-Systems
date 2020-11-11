@@ -1,0 +1,33 @@
+Please elaborate how you implement your FIFO and LRU replacement algorithm.
+You need to explain your design, not just paste source code here ... 
+
+FIFO
+
+The first thing I do in FIFO is make a for loop that starts from 0 to whatever 
+value is in AccessPatternLength. Once in the for loop I check if PageFrameList
+is filled or still has some empty slots. If it is not filled, then I fill them.
+However, if an element already exists, but PageFrameList is not yet filled
+then I do nothing. At this point I'm keeping track of the page faults, but I 
+leave the memory.nextToReplaced value still equal to 0. Once all the slots in 
+PageFrameList are filled, memory.nextToReplaced starts keeping track of which 
+element was in first. When a page fault occurs, the element in the index 
+specified by memory.nextToReplaced is replaced. Afterwards, nextToReplaced is 
+incremented since the next index is always the next element that was next in. 
+Whenever, nextToReplaced reaches the end of PageFrameList, it starts over at 
+index 0. 
+
+
+
+LRU
+
+The first thing I do in LRU is make a dynamically allocated array called lruPage. 
+lruPage is the same size as PageFrameList, except instead of keeping track of 
+pages, lruPage keeps track of when a page was last seen. The slots in lruPage
+and PageFrameList correspond to the same Page. All slots in lruPage
+start off as 0. At this point, LRU starts acting like FIFO by filling in the 
+slots inside of PageFrameList. However, unlike FIFO, LRU keeps track of when 
+each page is introduced by using lruPage. Once all the slots are filled LRU
+continues to go through the pages in the accessPattern, except whenever it
+encounters a page not inside of PageFrameList LRU searches through lruPage
+for the lowest number. The index with the lowest number is the least recently
+used page in PageFrameList and can be replaced with the new page. 
